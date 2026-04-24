@@ -1,58 +1,24 @@
-// Jenkinsfile
 pipeline {
     agent any
-
-    environment {
-        APP_NAME = "flask-app"
-        IMAGE_TAG = "latest"
-    }
-
     stages {
-
         stage('Clone Code') {
             steps {
+                // Replace with your GitHub repository URL
                 git branch: 'main', url: 'https://github.com/apeksha-ui98/two-tier-flask-devops.git'
             }
         }
-
-        stage('Verify Docker') {
-            steps {
-                sh 'docker version'
-                sh 'docker compose version'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t ${APP_NAME}:${IMAGE_TAG} .'
+                sh 'docker build -t flask-app:latest .'
             }
         }
-
-        stage('Stop Existing Containers') {
+        stage('Deploy with Docker Compose') {
             steps {
+                // Stop existing containers if they are running
                 sh 'docker compose down || true'
-            }
-        }
-
-        stage('Deploy Application') {
-            steps {
+                // Start the application, rebuilding the flask image
                 sh 'docker compose up -d --build'
             }
-        }
-
-        stage('Check Running Containers') {
-            steps {
-                sh 'docker ps'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Deployment completed successfully.'
-        }
-        failure {
-            echo 'Pipeline failed. Check logs.'
         }
     }
 }
