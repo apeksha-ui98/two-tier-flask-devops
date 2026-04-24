@@ -11,7 +11,7 @@ pipeline {
 
         stage('Clone Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/YOUR-USERNAME/YOUR-REPO.git'
+                git branch: 'main', url: 'https://github.com/apeksha-ui98/two-tier-flask-devops.git'
             }
         }
 
